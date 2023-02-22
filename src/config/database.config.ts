@@ -1,56 +1,69 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { User } from "../user/user.model";
-import { Role } from "../roles/roles.model";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import { User } from "../user/user.entity";
+
+import { Teacher } from "../teacher/teacher.entity";
+import { Student } from "../student/student.entity";
+import { School } from "../school/sсhool.entity";
+import { Group } from "../group/group.entity";
+import { Lesson } from "../lesson/lesson.entity";
+import { Homework } from "../homework/homework.entity";
+import { Topic } from "../topic/topic.entity";
 
 enum Env {
-    prod = 'production',
-    dev = 'development',
-    test = 'testing',
+    prod = "production",
+    dev = "development",
+    test = "testing",
 }
 
 function getDbConfig(
-    configService: ConfigService,
-    entities: any[],
+  configService: ConfigService,
+  entities: any[]
 ): PostgresConnectionOptions {
-    const env = configService.get<Env>('NODE_ENV');
+    const env = configService.get<Env>("NODE_ENV");
 
     switch (env) {
         case Env.prod:
             return {
                 synchronize: false,
-                type: configService.get('DB_TYPE'),
-                host: configService.get('DB_HOST'),
-                username: configService.get('DB_USER'),
-                password: configService.get('DB_PASS'),
-                database: configService.get('DB_NAME'),
+                type: configService.get("DB_TYPE"),
+                host: configService.get("DB_HOST"),
+                username: configService.get("DB_USER"),
+                password: configService.get("DB_PASS"),
+                database: configService.get("DB_NAME"),
                 entities,
-                migrations: [__dirname + '/migrations/*.ts'],
-                migrationsTableName: 'migrations',
+                migrations: [ __dirname + "/migrations/*.ts" ],
+                migrationsTableName: "migrations"
             };
         default:
             return {
                 synchronize: true,
-                type: configService.get('DB_TYPE'),
-                port: configService.get<number>('DB_PORT'),
-                host: configService.get('DB_HOST'),
-                username: configService.get('DB_USERNAME'),
-                password: configService.get('DB_PASSWORD'),
-                database: configService.get('DB_DATABASE'),
+                type: configService.get("DB_TYPE"),
+                port: configService.get<number>("DB_PORT"),
+                host: configService.get("DB_HOST"),
+                username: configService.get("DB_USERNAME"),
+                password: configService.get("DB_PASSWORD"),
+                database: configService.get("DB_DATABASE"),
                 entities,
-                migrations: [__dirname + '/migrations/*.ts'],
-                migrationsTableName: 'migrations',
+                migrations: [ __dirname + "/migrations/*.ts" ],
+                migrationsTableName: "migrations"
             };
     }
 }
 
 export const DatabaseModule = TypeOrmModule.forRootAsync({
-    imports: [ConfigModule],
-    inject: [ConfigService],
+    imports: [ ConfigModule ],
+    inject: [ ConfigService ],
     useFactory: (configService: ConfigService) =>
-        getDbConfig(configService, [
-            User,
-            Role
-        ]),
+      getDbConfig(configService, [
+          User,
+          Student,
+          Group,
+          Teacher,
+          School,
+          Lesson,
+          Homework,
+          Topic,
+      ])
 });
