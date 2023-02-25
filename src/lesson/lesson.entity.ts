@@ -40,8 +40,11 @@ export class Lesson {
   })
   title: string;
 
-  @OneToOne(() => Homework, (homework) => homework.lesson)
-  homework: Homework;
+  @OneToOne(() => Homework, (homework) => homework.lesson, {
+    nullable: true,
+    cascade: ['soft-remove']
+  })
+  homework?: Homework;
 
   @Column({
     type: 'jsonb',

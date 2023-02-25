@@ -1,31 +1,24 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { CreateUserDto } from "./dtos/create-user.dto";
+import { Controller, Get, UseGuards } from "@nestjs/common";
 import { UsersService } from "./user.service";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { User } from "./user.entity";
-import { Roles } from "../decorators/roles.decorator";
+import { ApiTags } from "@nestjs/swagger";
+import { AuthUser } from "../auth/interfaces/auth-user.interface";
+import { User } from "../decorators/user.decorator";
 import { RolesGuard } from "../auth/roles-guard";
 
-@ApiTags("Users")
+@ApiTags("User")
 @Controller("user")
+@UseGuards(RolesGuard)
 export class UsersController {
-
     constructor(private usersService: UsersService) {
     }
 
-    @ApiOperation({ summary: "Create users" })
-    @ApiResponse({ status: 200, type: User })
-    @Post()
-    create(@Body() userDto: CreateUserDto) {
-        return this.usersService.createUser(userDto);
+    @Get()
+    async getAllUsers() {
+        return await this.usersService.getAllUsers();
     }
 
-    @ApiOperation({ summary: "Get all users" })
-    @ApiResponse({ status: 200, type: [ User ] })
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
     @Get()
-    getAll() {
-        return this.usersService.getAllUsers();
+    async getUserDetails(@User() user: AuthUser) {
+        return await this.usersService.getUserDetails(user);
     }
 }

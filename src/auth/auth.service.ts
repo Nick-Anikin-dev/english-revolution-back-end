@@ -14,20 +14,20 @@ export class AuthService {
     }
 
     async signIn(signInDto: SignInDto) {
-        const user = await this.validateUser(signInDto);
+        const { password, ...user } = await this.validateUser(signInDto);
         const { token } = await this.generateToken(user);
         return {
             user, token
         };
     }
 
-    private async validateUser(userDto: CreateUserDto) {
-        const user = await this.userService.getUserByEmail(userDto.email);
+    private async validateUser(signInDto: SignInDto) {
+        const user = await this.userService.getUserByEmail(signInDto.email);
         if (!user) {
-            throw new NotFoundException(`User with email: ${userDto.email} does not exist`);
+            throw new NotFoundException(`User with email: ${signInDto.email} does not exist`);
         }
 
-        const isPasswordEquals = await bcrypt.compare(userDto.password, user.password);
+        const isPasswordEquals = await bcrypt.compare(signInDto.password, user.password);
 
         if (isPasswordEquals) {
             return user;
@@ -42,15 +42,15 @@ export class AuthService {
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser({ ...userDto, password: hashPassword });
-        const token = await this.generateToken(user);
+        const { token } = await this.generateToken(user);
         return {
             user,
             token
         };
     }
 
-    private async generateToken(user: User) {
-        const payload = { id: user.id, email: user.email, roles: user.role_type };
+    private async generateToken(user: Partial<User>) {
+        const payload = { id: user.id, email: user.email, role: user.role_type };
         return {
             token: this.jwtService.sign(payload)
         };

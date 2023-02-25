@@ -19,12 +19,6 @@ export class Group {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
-
   @ManyToOne(() => School, (school) => school.groups)
   school: School;
 
@@ -36,6 +30,12 @@ export class Group {
 
   @OneToMany(() => Student, (student) => student.group)
   students: Student[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @DeleteDateColumn({
     nullable: true

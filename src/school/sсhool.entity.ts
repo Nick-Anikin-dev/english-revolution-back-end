@@ -16,6 +16,13 @@ export class School {
   })
   user_id: number;
 
+  @ApiProperty({ example: "SkyEng", description: "School name" })
+  @Column({
+    type: "varchar",
+    nullable: true
+  })
+  name: string;
+
   @OneToMany(() => Group, (group) => group.school)
   groups: Group[];
 

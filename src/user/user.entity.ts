@@ -38,6 +38,14 @@ export class User {
     })
     password: string;
 
+    @ApiProperty({ example: "@user-b1", description: "Unique username" })
+    @Column({
+        type: "varchar",
+        nullable: false,
+        unique: true
+    })
+    username: string;
+
     @ApiProperty({ example: RolesEnum.STUDENT, description: "User role" })
     @Column({
         type: "enum",
@@ -48,7 +56,7 @@ export class User {
 
     @Column({
         type: "numeric",
-        nullable: false
+        nullable: true,
     })
     user_role_id: number;
 }
