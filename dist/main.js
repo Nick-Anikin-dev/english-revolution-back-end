@@ -20,7 +20,7 @@ async function start() {
     }));
     app.enableCors({
         origin: [
-            "localhost:3000"
+            "http://localhost:3000"
         ]
     });
     await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));

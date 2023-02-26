@@ -25,7 +25,7 @@ async function start() {
 
     app.enableCors({
         origin: [
-            "localhost:3000"
+            "http://localhost:3000"
         ]
     });
 
