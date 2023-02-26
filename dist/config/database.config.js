@@ -22,6 +22,7 @@ function getDbConfig(configService, entities) {
     switch (env) {
         case Env.prod:
             return {
+                url: 'postgres://yyjcwzqeqbadmj:6c4f517eda35bf35ed6571a4e7603f6a428061404aba7792a37216a9377ed268@ec2-52-30-75-37.eu-west-1.compute.amazonaws.com:5432/d6ojpm6kj8r5jl',
                 synchronize: false,
                 type: configService.get("DB_TYPE"),
                 host: configService.get("DB_HOST"),
@@ -34,6 +35,7 @@ function getDbConfig(configService, entities) {
             };
         default:
             return {
+                url: 'postgres://yyjcwzqeqbadmj:6c4f517eda35bf35ed6571a4e7603f6a428061404aba7792a37216a9377ed268@ec2-52-30-75-37.eu-west-1.compute.amazonaws.com:5432/d6ojpm6kj8r5jl',
                 synchronize: true,
                 type: configService.get("DB_TYPE"),
                 port: configService.get("DB_PORT"),
