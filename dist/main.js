@@ -15,10 +15,14 @@ async function start() {
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup("/api/docs", app, document);
-    app.enableCors();
     app.useGlobalPipes(new common_1.ValidationPipe({
-        whitelist: true,
+        whitelist: true
     }));
+    app.enableCors({
+        origin: [
+            "localhost:3000"
+        ]
+    });
     await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
 }
 start();
