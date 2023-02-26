@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from "@nestjs/common";
 
 
 async function start() {
@@ -17,12 +17,17 @@ async function start() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("/api/docs", app, document);
 
-    app.enableCors()
     app.useGlobalPipes(
       new ValidationPipe({
-          whitelist: true,
-      }),
+          whitelist: true
+      })
     );
+
+    app.enableCors({
+        origin: [
+            "localhost:3000"
+        ]
+    });
 
     await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
 }
