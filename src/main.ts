@@ -17,7 +17,7 @@ async function start() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("/api/docs", app, document);
 
-
+    app.enableCors()
     app.useGlobalPipes(
       new ValidationPipe({
           whitelist: true,
