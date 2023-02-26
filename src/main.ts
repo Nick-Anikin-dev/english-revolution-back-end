@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 
 async function start() {
-    const PORT = process.env.APP_PORT || 5000;
+    const PORT = process.env.PORT || 5000;
     const app = await NestFactory.create(AppModule);
 
     const config = new DocumentBuilder()
