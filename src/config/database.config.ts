@@ -26,7 +26,7 @@ function getDbConfig(
   switch (env) {
     case Env.prod:
       return {
-        synchronize: false,
+        synchronize: true,
         type: configService.get("DB_TYPE"),
         host: configService.get("DB_HOST"),
         username: configService.get("DB_USERNAME"),
