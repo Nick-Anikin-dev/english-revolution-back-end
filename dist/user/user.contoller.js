@@ -26,7 +26,7 @@ let UsersController = class UsersController {
         return await this.usersService.getAllUsers();
     }
     async getUserDetails(user) {
-        return await this.usersService.getUserDetails(user);
+        return await this.usersService.getUserRoleDetails(user);
     }
 };
 __decorate([

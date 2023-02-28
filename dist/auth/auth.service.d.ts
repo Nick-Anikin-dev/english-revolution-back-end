@@ -1,11 +1,14 @@
-import { CreateUserDto } from "../user/dtos/create-user.dto";
-import { UsersService } from "../user/user.service";
-import { JwtService } from "@nestjs/jwt";
-import { SignInDto } from "./dto/sign-in.dto";
+import { CreateUserDto } from '../user/dtos/create-user.dto';
+import { UsersService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '../user/user.entity';
+import { SignInDto } from './dto/sign-in.dto';
+import { Request } from 'express';
 export declare class AuthService {
     private userService;
     private jwtService;
     constructor(userService: UsersService, jwtService: JwtService);
+    auth(req: Request): Promise<User>;
     signIn(signInDto: SignInDto): Promise<{
         user: {
             id: number;

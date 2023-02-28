@@ -56,7 +56,15 @@ let UsersService = class UsersService {
             }
         }));
     }
-    async getUserDetails(user) {
+    async getUserById(id) {
+        return await this.userRepository.findOne({
+            select: [
+                'id', 'user_role_id', 'first_name', 'last_name', 'role_type', 'username', 'email',
+            ],
+            where: { id },
+        });
+    }
+    async getUserRoleDetails(user) {
         switch (user.role) {
             case roles_enum_1.RolesEnum.STUDENT:
                 return await this.studentService.getStudentByUserId(user.id);
@@ -71,7 +79,7 @@ let UsersService = class UsersService {
         const _a = await this.userRepository.save(new_user), { password } = _a, user = __rest(_a, ["password"]);
         const new_user_role = await this.createUserRole(dto.role_type, user.id);
         await this.userRepository.update({ id: user.id }, {
-            user_role_id: new_user_role.id
+            user_role_id: new_user_role.id,
         });
         return Object.assign(Object.assign({}, user), { user_role_id: new_user_role.id });
     }

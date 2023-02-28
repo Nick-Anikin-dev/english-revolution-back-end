@@ -1,11 +1,11 @@
-import { User } from "./user.entity";
-import { CreateUserDto } from "./dtos/create-user.dto";
-import { Repository } from "typeorm";
-import { RolesEnum } from "../constants/roles/roles.enum";
-import { SchoolService } from "../school/school.service";
-import { TeacherService } from "../teacher/teacher.service";
-import { StudentService } from "../student/student.service";
-import { AuthUser } from "../auth/interfaces/auth-user.interface";
+import { User } from './user.entity';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { Repository } from 'typeorm';
+import { RolesEnum } from '../constants/roles/roles.enum';
+import { SchoolService } from '../school/school.service';
+import { TeacherService } from '../teacher/teacher.service';
+import { StudentService } from '../student/student.service';
+import { AuthUser } from '../auth/interfaces/auth-user.interface';
 export declare class UsersService {
     private userRepository;
     private readonly studentService;
@@ -23,7 +23,8 @@ export declare class UsersService {
         role_type: RolesEnum;
         user_role_id: number;
     }[]>;
-    getUserDetails(user: AuthUser): Promise<import("../student/student.entity").Student | import("../teacher/teacher.entity").Teacher | import("../school/s\u0441hool.entity").School>;
+    getUserById(id: any): Promise<User>;
+    getUserRoleDetails(user: AuthUser): Promise<import("../student/student.entity").Student | import("../teacher/teacher.entity").Teacher | import("../school/s\u0441hool.entity").School>;
     createUser(dto: CreateUserDto): Promise<{
         user_role_id: number;
         id: number;

@@ -19,6 +19,6 @@ export class UsersController {
 
     @Get()
     async getUserDetails(@User() user: AuthUser) {
-        return await this.usersService.getUserDetails(user);
+        return await this.usersService.getUserRoleDetails(user);
     }
 }

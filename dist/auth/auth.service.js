@@ -30,11 +30,32 @@ let AuthService = class AuthService {
         this.userService = userService;
         this.jwtService = jwtService;
     }
+    async auth(req) {
+        const { authorization } = req.headers;
+        if (!authorization) {
+            throw new common_1.UnauthorizedException();
+        }
+        const [bearer, token] = authorization.split(' ');
+        if (bearer !== 'Bearer') {
+            throw new common_1.UnauthorizedException();
+        }
+        let user;
+        try {
+            user = this.jwtService.verify(token);
+        }
+        catch (e) {
+            throw new common_1.UnauthorizedException();
+        }
+        if (!user) {
+            throw new common_1.UnauthorizedException();
+        }
+        return await this.userService.getUserById(user.id);
+    }
     async signIn(signInDto) {
         const _a = await this.validateUser(signInDto), { password } = _a, user = __rest(_a, ["password"]);
         const { token } = await this.generateToken(user);
         return {
-            user, token
+            user, token,
         };
     }
     async validateUser(signInDto) {
@@ -46,25 +67,25 @@ let AuthService = class AuthService {
         if (isPasswordEquals) {
             return user;
         }
-        throw new common_1.UnauthorizedException({ message: "Incorrect email or password" });
+        throw new common_1.UnauthorizedException({ message: 'Incorrect email or password' });
     }
     async signUp(userDto) {
         const candidate = await this.userService.getUserByEmail(userDto.email);
         if (candidate) {
-            throw new common_1.HttpException("User with this is already exist", common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException('User with this is already exist', common_1.HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser(Object.assign(Object.assign({}, userDto), { password: hashPassword }));
         const { token } = await this.generateToken(user);
         return {
             user,
-            token
+            token,
         };
     }
     async generateToken(user) {
         const payload = { id: user.id, email: user.email, role: user.role_type };
         return {
-            token: this.jwtService.sign(payload)
+            token: this.jwtService.sign(payload),
         };
     }
 };

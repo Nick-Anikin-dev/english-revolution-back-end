@@ -22,30 +22,40 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    signIn(signInDto) {
-        return this.authService.signIn(signInDto);
+    async auth(req) {
+        return await this.authService.auth(req);
     }
-    signUp(signUpDto) {
-        return this.authService.signUp(signUpDto);
+    async signIn(signInDto) {
+        return await this.authService.signIn(signInDto);
+    }
+    async signUp(signUpDto) {
+        return await this.authService.signUp(signUpDto);
     }
 };
 __decorate([
-    (0, common_1.Post)("/sign-in"),
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "auth", null);
+__decorate([
+    (0, common_1.Post)('/sign-in'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [sign_in_dto_1.SignInDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signIn", null);
 __decorate([
-    (0, common_1.Post)("/sign-up"),
+    (0, common_1.Post)('/sign-up'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [sign_up_dto_1.SignUpDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signUp", null);
 AuthController = __decorate([
-    (0, swagger_1.ApiTags)("Authorization"),
-    (0, common_1.Controller)("auth"),
+    (0, swagger_1.ApiTags)('Authorization'),
+    (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;

@@ -1,13 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { User } from "./user.entity";
-import { CreateUserDto } from "./dtos/create-user.dto";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { RolesEnum } from "../constants/roles/roles.enum";
-import { SchoolService } from "../school/school.service";
-import { TeacherService } from "../teacher/teacher.service";
-import { StudentService } from "../student/student.service";
-import { AuthUser } from "../auth/interfaces/auth-user.interface";
+import { Injectable } from '@nestjs/common';
+import { User } from './user.entity';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { RolesEnum } from '../constants/roles/roles.enum';
+import { SchoolService } from '../school/school.service';
+import { TeacherService } from '../teacher/teacher.service';
+import { StudentService } from '../student/student.service';
+import { AuthUser } from '../auth/interfaces/auth-user.interface';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +15,7 @@ export class UsersService {
       @InjectRepository(User) private userRepository: Repository<User>,
       private readonly studentService: StudentService,
       private readonly teacherService: TeacherService,
-      private readonly schoolService: SchoolService
+      private readonly schoolService: SchoolService,
     ) {
     }
 
@@ -37,7 +37,16 @@ export class UsersService {
         }));
     }
 
-    async getUserDetails(user: AuthUser) {
+    async getUserById(id) {
+        return await this.userRepository.findOne({
+            select: [
+                'id', 'user_role_id', 'first_name', 'last_name', 'role_type', 'username', 'email',
+            ],
+            where: { id },
+        });
+    }
+
+    async getUserRoleDetails(user: AuthUser) {
         switch (user.role) {
             case RolesEnum.STUDENT:
                 return await this.studentService.getStudentByUserId(user.id);
@@ -53,7 +62,7 @@ export class UsersService {
         const { password, ...user } = await this.userRepository.save(new_user);
         const new_user_role = await this.createUserRole(dto.role_type, user.id);
         await this.userRepository.update({ id: user.id }, {
-            user_role_id: new_user_role.id
+            user_role_id: new_user_role.id,
         });
         return { ...user, user_role_id: new_user_role.id };
     }

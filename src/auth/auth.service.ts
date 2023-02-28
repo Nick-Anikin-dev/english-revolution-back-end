@@ -1,10 +1,11 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { CreateUserDto } from "../user/dtos/create-user.dto";
-import { UsersService } from "../user/user.service";
-import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcryptjs";
-import { User } from "../user/user.entity";
-import { SignInDto } from "./dto/sign-in.dto";
+import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CreateUserDto } from '../user/dtos/create-user.dto';
+import { UsersService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
+import { User } from '../user/user.entity';
+import { SignInDto } from './dto/sign-in.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -13,11 +14,34 @@ export class AuthService {
                 private jwtService: JwtService) {
     }
 
+    async auth(req: Request) {
+        const { authorization } = req.headers;
+        if (!authorization) {
+            throw new UnauthorizedException();
+        }
+        const [ bearer, token ] = authorization.split(' ');
+        if (bearer !== 'Bearer') {
+            throw new UnauthorizedException();
+        }
+        let user;
+
+        try {
+            user = this.jwtService.verify(token);
+        } catch (e) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user) {
+            throw new UnauthorizedException();
+        }
+        return await this.userService.getUserById(user.id);
+    }
+
     async signIn(signInDto: SignInDto) {
         const { password, ...user } = await this.validateUser(signInDto);
         const { token } = await this.generateToken(user);
         return {
-            user, token
+            user, token,
         };
     }
 
@@ -32,27 +56,27 @@ export class AuthService {
         if (isPasswordEquals) {
             return user;
         }
-        throw new UnauthorizedException({ message: "Incorrect email or password" });
+        throw new UnauthorizedException({ message: 'Incorrect email or password' });
     }
 
     async signUp(userDto: CreateUserDto) {
         const candidate = await this.userService.getUserByEmail(userDto.email);
         if (candidate) {
-            throw new HttpException("User with this is already exist", HttpStatus.BAD_REQUEST);
+            throw new HttpException('User with this is already exist', HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser({ ...userDto, password: hashPassword });
         const { token } = await this.generateToken(user);
         return {
             user,
-            token
+            token,
         };
     }
 
     private async generateToken(user: Partial<User>) {
         const payload = { id: user.id, email: user.email, role: user.role_type };
         return {
-            token: this.jwtService.sign(payload)
+            token: this.jwtService.sign(payload),
         };
     }
 }
