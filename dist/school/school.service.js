@@ -17,9 +17,15 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const s_hool_entity_1 = require("./s\u0441hool.entity");
+const teacher_service_1 = require("../teacher/teacher.service");
+const student_service_1 = require("../student/student.service");
+const teacher_entity_1 = require("../teacher/teacher.entity");
 let SchoolService = class SchoolService {
-    constructor(schoolRepository) {
+    constructor(schoolRepository, teacherRepository, studentService, teacherService) {
         this.schoolRepository = schoolRepository;
+        this.teacherRepository = teacherRepository;
+        this.studentService = studentService;
+        this.teacherService = teacherService;
     }
     async createSchool(user_id) {
         const new_school = this.schoolRepository.create({ user_id });
@@ -28,11 +34,24 @@ let SchoolService = class SchoolService {
     async getSchoolByUserId(user_id) {
         return await this.schoolRepository.findOne({ where: { user_id } });
     }
+    async assignTeacherToStudents(assignTeacherToStudents) {
+        const { teacher_id, student_ids } = assignTeacherToStudents;
+        const teacher = await this.teacherService.getTeacherById(teacher_id);
+        if (!teacher) {
+            throw new common_1.NotFoundException(`Failed to find teacher with id: ${teacher_id}`);
+        }
+        const students = await this.studentService.getStudentByIds(student_ids);
+        return await this.teacherRepository.save(Object.assign(Object.assign({}, teacher), { students }));
+    }
 };
 SchoolService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(s_hool_entity_1.School)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(teacher_entity_1.Teacher)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
+        student_service_1.StudentService,
+        teacher_service_1.TeacherService])
 ], SchoolService);
 exports.SchoolService = SchoolService;
 //# sourceMappingURL=school.service.js.map

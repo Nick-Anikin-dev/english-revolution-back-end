@@ -11,7 +11,6 @@ export class Topic {
   id: number;
 
   @Column({
-    type: "numeric",
     nullable: false
   })
   user_id: number;

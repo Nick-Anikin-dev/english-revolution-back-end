@@ -4,6 +4,7 @@ import { Student } from "../student/student.entity";
 import { Lesson } from "../lesson/lesson.entity";
 export declare class Group {
     id: number;
+    name: string;
     school: School;
     teacher: Teacher;
     lessons: Lesson[];

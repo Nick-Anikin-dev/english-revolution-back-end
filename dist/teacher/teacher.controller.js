@@ -21,10 +21,20 @@ let TeacherController = class TeacherController {
     constructor(teacherService) {
         this.teacherService = teacherService;
     }
+    async findTeachersByUsername(username) {
+        return await this.teacherService.findTeachersByUsername(username);
+    }
     async getTeacherByUserId(id) {
         return await this.teacherService.getTeacherByUserId(id);
     }
 };
+__decorate([
+    (0, common_1.Get)('/search'),
+    __param(0, (0, common_1.Query)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TeacherController.prototype, "findTeachersByUsername", null);
 __decorate([
     (0, common_1.Get)("/:id"),
     __param(0, (0, common_1.Param)("id")),

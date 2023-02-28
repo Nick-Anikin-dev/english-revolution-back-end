@@ -73,7 +73,6 @@ __decorate([
 ], User.prototype, "role_type", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        type: "numeric",
         nullable: true,
     }),
     __metadata("design:type", Number)

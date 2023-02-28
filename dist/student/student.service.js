@@ -29,13 +29,24 @@ let StudentService = class StudentService {
         return await this.studentRepository.save(new_student);
     }
     async getStudentByUserId(user_id) {
-        return await this.studentRepository.findOne({ where: { user_id } });
+        const student = await this.studentRepository.findOne({ where: { user_id }, relations: ['teacher'] });
+        if (!student) {
+            throw new common_1.NotFoundException(`Failed to find student with user_id: ${user_id}`);
+        }
+        return student;
     }
-    async findStudentsByUsername(username) {
-        const users = await this.userRepository.find({
-            where: { username: (0, typeorm_1.ILike)(username), role_type: roles_enum_1.RolesEnum.STUDENT }
+    async getStudentByIds(student_ids) {
+        return await this.studentRepository.find({
+            where: {
+                id: (0, typeorm_1.In)(student_ids),
+            },
         });
-        return users;
+    }
+    async findStudentsByUsername(user, username) {
+        return await this.userRepository.find({
+            select: ['id', 'user_role_id', 'username', 'first_name', 'last_name', 'email'],
+            where: { username: (0, typeorm_1.ILike)(`%${username}%`), role_type: roles_enum_1.RolesEnum.STUDENT },
+        });
     }
 };
 StudentService = __decorate([

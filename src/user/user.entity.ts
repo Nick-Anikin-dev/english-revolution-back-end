@@ -55,7 +55,6 @@ export class User {
     role_type: RolesEnum;
 
     @Column({
-        type: "numeric",
         nullable: true,
     })
     user_role_id: number;

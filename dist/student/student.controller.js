@@ -17,17 +17,29 @@ const common_1 = require("@nestjs/common");
 const student_service_1 = require("./student.service");
 const swagger_1 = require("@nestjs/swagger");
 const roles_guard_1 = require("../auth/roles-guard");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const roles_enum_1 = require("../constants/roles/roles.enum");
+const user_decorator_1 = require("../decorators/user.decorator");
 let StudentController = class StudentController {
     constructor(studentService) {
         this.studentService = studentService;
     }
+    async findStudentsByUsername(user, username) {
+        return await this.studentService.findStudentsByUsername(user, username);
+    }
     async getStudentByUserId(id) {
         return await this.studentService.getStudentByUserId(id);
     }
-    async findStudentsByUsername(username) {
-        return await this.studentService.findStudentsByUsername(username);
-    }
 };
+__decorate([
+    (0, common_1.Get)('/search'),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER, roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Query)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], StudentController.prototype, "findStudentsByUsername", null);
 __decorate([
     (0, common_1.Get)('/:id'),
     __param(0, (0, common_1.Param)('id')),
@@ -35,13 +47,6 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], StudentController.prototype, "getStudentByUserId", null);
-__decorate([
-    (0, common_1.Get)('/search'),
-    __param(0, (0, common_1.Query)('username')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], StudentController.prototype, "findStudentsByUsername", null);
 StudentController = __decorate([
     (0, swagger_1.ApiTags)("Student"),
     (0, common_1.Controller)('student'),

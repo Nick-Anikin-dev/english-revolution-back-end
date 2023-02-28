@@ -14,14 +14,22 @@ const school_controller_1 = require("./school.controller");
 const school_service_1 = require("./school.service");
 const user_entity_1 = require("../user/user.entity");
 const auth_module_1 = require("../auth/auth.module");
+const teacher_module_1 = require("../teacher/teacher.module");
+const student_module_1 = require("../student/student.module");
+const teacher_entity_1 = require("../teacher/teacher.entity");
 let SchoolModule = class SchoolModule {
 };
 SchoolModule = __decorate([
     (0, common_1.Module)({
-        imports: [(0, common_1.forwardRef)(() => auth_module_1.AuthModule), typeorm_1.TypeOrmModule.forFeature([s_hool_entity_1.School, user_entity_1.User])],
+        imports: [
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
+            typeorm_1.TypeOrmModule.forFeature([s_hool_entity_1.School, user_entity_1.User, teacher_entity_1.Teacher]),
+            student_module_1.StudentModule,
+            teacher_module_1.TeacherModule
+        ],
         controllers: [school_controller_1.SchoolController],
         providers: [school_service_1.SchoolService],
-        exports: [school_service_1.SchoolService]
+        exports: [school_service_1.SchoolService],
     })
 ], SchoolModule);
 exports.SchoolModule = SchoolModule;

@@ -23,7 +23,7 @@ export declare class UsersService {
         role_type: RolesEnum;
         user_role_id: number;
     }[]>;
-    getUserDetails(user: AuthUser): Promise<import("../teacher/teacher.entity").Teacher | import("../student/student.entity").Student | import("../school/s\u0441hool.entity").School>;
+    getUserDetails(user: AuthUser): Promise<import("../student/student.entity").Student | import("../teacher/teacher.entity").Teacher | import("../school/s\u0441hool.entity").School>;
     createUser(dto: CreateUserDto): Promise<{
         user_role_id: number;
         id: number;

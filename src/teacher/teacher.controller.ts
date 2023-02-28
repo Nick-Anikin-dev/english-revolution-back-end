@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { TeacherService } from "./teacher.service";
 import { ApiTags } from "@nestjs/swagger";
 import { RolesGuard } from "../auth/roles-guard";
@@ -8,6 +8,11 @@ import { RolesGuard } from "../auth/roles-guard";
 @UseGuards(RolesGuard)
 export class TeacherController {
   constructor(private readonly teacherService: TeacherService) {
+  }
+
+  @Get('/search')
+  async findTeachersByUsername(@Query('username') username: string){
+    return await this.teacherService.findTeachersByUsername(username);
   }
 
   @Get("/:id")

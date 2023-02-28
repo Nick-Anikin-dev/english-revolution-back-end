@@ -44,12 +44,12 @@ let LessonService = class LessonService {
         }
         switch (user.role) {
             case roles_enum_1.RolesEnum.STUDENT:
-                if (lesson.student.user_id != user.id) {
+                if (lesson.student.user_id !== user.id) {
                     throw new common_1.ForbiddenException(`Failed to get lesson details`);
                 }
                 break;
             case roles_enum_1.RolesEnum.TEACHER:
-                if (lesson.teacher.user_id != user.id) {
+                if (lesson.teacher.user_id !== user.id) {
                     throw new common_1.ForbiddenException(`Failed to get lesson details`);
                 }
                 break;
@@ -92,7 +92,7 @@ let LessonService = class LessonService {
         if (!lesson) {
             throw new common_1.NotFoundException(`Failed to find lesson with id: ${id}`);
         }
-        if (lesson.teacher.user_id != user.id) {
+        if (lesson.teacher.user_id !== user.id) {
             throw new common_1.ForbiddenException(`Failed to remove lesson`);
         }
         return await this.lessonRepository.softDelete({ id });

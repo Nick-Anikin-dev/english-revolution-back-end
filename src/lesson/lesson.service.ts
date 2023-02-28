@@ -26,12 +26,12 @@ export class LessonService {
 
     switch (user.role){
       case RolesEnum.STUDENT:
-        if (lesson.student.user_id != user.id) {
+        if (lesson.student.user_id !== user.id) {
           throw new ForbiddenException(`Failed to get lesson details`);
         }
         break;
       case RolesEnum.TEACHER:
-        if (lesson.teacher.user_id != user.id) {
+        if (lesson.teacher.user_id !== user.id) {
           throw new ForbiddenException(`Failed to get lesson details`);
         }
         break;
@@ -80,7 +80,7 @@ export class LessonService {
     if (!lesson) {
       throw new NotFoundException(`Failed to find lesson with id: ${id}`);
     }
-    if (lesson.teacher.user_id != user.id) {
+    if (lesson.teacher.user_id !== user.id) {
       throw new ForbiddenException(`Failed to remove lesson`);
     }
     return await this.lessonRepository.softDelete({ id });

@@ -1,7 +1,9 @@
-import { Controller, Delete, Get, Patch, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiTags } from "@nestjs/swagger";
 import { GroupService } from "./group.service";
 import { RolesGuard } from "../auth/roles-guard";
+import { CreateGroup } from './dtos/create-group.dto';
+import { AddStudents } from './dtos/add-students.dto';
 
 @ApiTags("Group")
 @Controller('group')
@@ -10,20 +12,42 @@ export class GroupController {
   constructor(private readonly groupService: GroupService) {
   }
   @Get()
-  async getGroups(){}
+  async getGroups(){
+    return await this.groupService.getGroups();
+  }
 
-  @Get()
-  async getGroupDetails(){}
+  @Get('/:id')
+  async getGroupDetails(@Param('id') id: number){
+    return await this.groupService.getGroupDetails(id)
+  }
 
   @Post()
-  async addGroup(){}
+  async createGroup(@Body() createGroup: CreateGroup){
+    return await this.groupService.createGroup(createGroup)
+  }
 
-  @Put()
-  async addStudent(){}
+  @Put('/student/:student_id')
+  async addStudent(@Param('student_id') student_id: number){
+    return await this.groupService.addStudent(student_id);
+  }
 
-  @Delete()
-  async deleteStudent(){}
+  @Put('/students')
+  async addStudents(@Body() addStudents :AddStudents){
+    return await this.groupService.addStudents(addStudents);
+  }
 
-  @Patch()
-  async assignTeacher(){}
+  @Delete('/student/:student_id')
+  async deleteStudent(@Param('student_id') student_id: number){
+    return await this.groupService.deleteStudent(student_id);
+  }
+
+  @Delete('/:id')
+  async deleteGroup(@Param('id') id: number){
+    return await this.groupService.deleteGroup(id);
+  }
+
+  @Patch('/teacher/:teacher_id')
+  async assignTeacher(@Param('teacher_id') teacher_id: number){
+    return await this.groupService.assignTeacher(teacher_id);
+  }
 }

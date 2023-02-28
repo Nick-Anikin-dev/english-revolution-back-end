@@ -24,7 +24,6 @@ __decorate([
 ], School.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        type: "numeric",
         nullable: false
     }),
     __metadata("design:type", Number)

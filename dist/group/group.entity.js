@@ -24,6 +24,13 @@ __decorate([
     __metadata("design:type", Number)
 ], Group.prototype, "id", void 0);
 __decorate([
+    (0, typeorm_1.Column)({
+        type: 'varchar',
+        nullable: false,
+    }),
+    __metadata("design:type", String)
+], Group.prototype, "name", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => s_hool_entity_1.School, (school) => school.groups),
     __metadata("design:type", s_hool_entity_1.School)
 ], Group.prototype, "school", void 0);

@@ -17,22 +17,44 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const teacher_entity_1 = require("./teacher.entity");
+const roles_enum_1 = require("../constants/roles/roles.enum");
+const user_entity_1 = require("../user/user.entity");
 let TeacherService = class TeacherService {
-    constructor(teacherRepository) {
+    constructor(teacherRepository, userRepository) {
         this.teacherRepository = teacherRepository;
+        this.userRepository = userRepository;
     }
     async createTeacher(user_id) {
         const new_teacher = this.teacherRepository.create({ user_id });
         return await this.teacherRepository.save(new_teacher);
     }
+    async getTeacherById(id) {
+        const teacher = await this.teacherRepository.findOne({ where: { id } });
+        if (!teacher) {
+            throw new common_1.NotFoundException(`Failed to find teacher with id: ${id}`);
+        }
+        return teacher;
+    }
     async getTeacherByUserId(user_id) {
-        return await this.teacherRepository.findOne({ where: { user_id } });
+        const teacher = await this.teacherRepository.findOne({ where: { user_id } });
+        if (!teacher) {
+            throw new common_1.NotFoundException(`Failed to find teacher with user_id: ${user_id}`);
+        }
+        return teacher;
+    }
+    async findTeachersByUsername(username) {
+        return await this.userRepository.find({
+            select: ['id', 'user_role_id', 'username', 'first_name', 'last_name', 'email'],
+            where: { username: (0, typeorm_2.ILike)(`%${username}%`), role_type: roles_enum_1.RolesEnum.TEACHER }
+        });
     }
 };
 TeacherService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(teacher_entity_1.Teacher)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], TeacherService);
 exports.TeacherService = TeacherService;
 //# sourceMappingURL=teacher.service.js.map

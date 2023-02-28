@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { ILike, Repository } from "typeorm";
-import { Student } from "./student.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "../user/user.entity";
-import { RolesEnum } from "../constants/roles/roles.enum";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { ILike, In, Repository } from 'typeorm';
+import { Student } from './student.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../user/user.entity';
+import { RolesEnum } from '../constants/roles/roles.enum';
+import { AuthUser } from '../auth/interfaces/auth-user.interface';
 
 @Injectable()
 export class StudentService {
@@ -20,13 +21,25 @@ export class StudentService {
   }
 
   async getStudentByUserId(user_id: number) {
-    return await this.studentRepository.findOne({ where: { user_id } });
+    const student = await this.studentRepository.findOne({ where: { user_id }, relations: [ 'teacher' ] });
+    if (!student) {
+      throw new NotFoundException(`Failed to find student with user_id: ${user_id}`);
+    }
+    return student;
   }
 
-  async findStudentsByUsername(username: string) {
-    const users = await this.userRepository.find({
-      where: { username: ILike(username), role_type: RolesEnum.STUDENT }
+  async getStudentByIds(student_ids: number[]) {
+    return await this.studentRepository.find({
+      where: {
+        id: In(student_ids),
+      },
     });
-    return users;
+  }
+
+  async findStudentsByUsername(user: AuthUser, username: string) {
+    return await this.userRepository.find({
+      select: [ 'id', 'user_role_id', 'username', 'first_name', 'last_name', 'email' ],
+      where: { username: ILike(`%${username}%`), role_type: RolesEnum.STUDENT },
+    });
   }
 }

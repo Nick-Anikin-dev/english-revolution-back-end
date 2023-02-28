@@ -22,7 +22,6 @@ export class Teacher {
   id: number;
 
   @Column({
-    type: "numeric",
     nullable: false
   })
   user_id: number;

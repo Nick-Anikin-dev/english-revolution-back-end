@@ -1,12 +1,13 @@
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from "typeorm";
+  UpdateDateColumn,
+} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
 import { School } from "../school/sсhool.entity";
 import { Teacher } from "../teacher/teacher.entity";
@@ -18,6 +19,12 @@ export class Group {
   @ApiProperty({ example: 1, description: "Primary identifier" })
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  name: string;
 
   @ManyToOne(() => School, (school) => school.groups)
   school: School;
