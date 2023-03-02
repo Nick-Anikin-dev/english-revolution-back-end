@@ -1,53 +1,72 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiTags } from "@nestjs/swagger";
-import { GroupService } from "./group.service";
-import { RolesGuard } from "../auth/roles-guard";
+import { ApiTags } from '@nestjs/swagger';
+import { GroupService } from './group.service';
+import { RolesGuard } from '../auth/roles-guard';
 import { CreateGroup } from './dtos/create-group.dto';
 import { AddStudents } from './dtos/add-students.dto';
+import { User } from '../decorators/user.decorator';
+import { AuthUser } from '../auth/interfaces/auth-user.interface';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesEnum } from '../constants/roles/roles.enum';
 
-@ApiTags("Group")
+@ApiTags('Group')
 @Controller('group')
 @UseGuards(RolesGuard)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {
   }
+
   @Get()
-  async getGroups(){
-    return await this.groupService.getGroups();
+  @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async getGroups(@User() user: AuthUser) {
+    return await this.groupService.getGroups(user);
   }
 
-  @Get('/:id')
-  async getGroupDetails(@Param('id') id: number){
-    return await this.groupService.getGroupDetails(id)
+  @Get('/:id/school')
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async getGroupDetails(@User() user: AuthUser, @Param('id') id: number) {
+    return await this.groupService.getGroupDetails(user, id);
+  }
+
+  @Get('/:id/teacher')
+  @Roles(RolesEnum.TEACHER)
+  async getTeacherGroupDetails(@User() user: AuthUser, @Param('id') id: number) {
+    return await this.groupService.getTeacherGroupDetails(user, id);
   }
 
   @Post()
-  async createGroup(@Body() createGroup: CreateGroup){
-    return await this.groupService.createGroup(createGroup)
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async createGroup(@User() user: AuthUser, @Body() createGroup: CreateGroup) {
+    return await this.groupService.createGroup(user, createGroup);
   }
 
   @Put('/student/:student_id')
-  async addStudent(@Param('student_id') student_id: number){
-    return await this.groupService.addStudent(student_id);
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async addStudent(@User() user: AuthUser, @Param('student_id') student_id: number) {
+    return await this.groupService.addStudent(user, student_id);
   }
 
-  @Put('/students')
-  async addStudents(@Body() addStudents :AddStudents){
-    return await this.groupService.addStudents(addStudents);
+  @Put('/:id/students')
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async addStudents(@User() user: AuthUser, @Param('id') id: number, @Body() addStudents: AddStudents) {
+    return await this.groupService.addStudents(id, user, addStudents);
   }
 
   @Delete('/student/:student_id')
-  async deleteStudent(@Param('student_id') student_id: number){
-    return await this.groupService.deleteStudent(student_id);
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async deleteStudent(@User() user: AuthUser, @Param('student_id') student_id: number) {
+    return await this.groupService.deleteStudent(user, student_id);
   }
 
   @Delete('/:id')
-  async deleteGroup(@Param('id') id: number){
-    return await this.groupService.deleteGroup(id);
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async deleteGroup(@User() user: AuthUser, @Param('id') id: number) {
+    return await this.groupService.deleteGroup(user, id);
   }
 
   @Patch('/teacher/:teacher_id')
-  async assignTeacher(@Param('teacher_id') teacher_id: number){
-    return await this.groupService.assignTeacher(teacher_id);
+  @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async assignTeacher(@User() user: AuthUser, @Param('teacher_id') teacher_id: number) {
+    return await this.groupService.assignTeacher(user, teacher_id);
   }
 }

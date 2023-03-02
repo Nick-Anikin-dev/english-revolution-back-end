@@ -22,16 +22,13 @@ function getDbConfig(configService, entities) {
     switch (env) {
         case Env.prod:
             return {
-                synchronize: false,
+                synchronize: true,
                 type: configService.get("DB_TYPE"),
                 host: configService.get("DB_HOST"),
                 username: configService.get("DB_USERNAME"),
                 password: configService.get("DB_PASSWORD"),
                 database: configService.get("DB_DATABASE"),
                 entities,
-                ssl: {
-                    rejectUnauthorized: false
-                },
                 migrations: [__dirname + "/migrations/*.ts"],
                 migrationsTableName: "migrations"
             };

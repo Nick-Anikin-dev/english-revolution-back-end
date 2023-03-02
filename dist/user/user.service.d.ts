@@ -24,7 +24,7 @@ export declare class UsersService {
         user_role_id: number;
     }[]>;
     getUserById(id: any): Promise<User>;
-    getUserRoleDetails(user: AuthUser): Promise<import("../student/student.entity").Student | import("../teacher/teacher.entity").Teacher | import("../school/s\u0441hool.entity").School>;
+    getUserRoleDetails(user: AuthUser): Promise<import("../teacher/teacher.entity").Teacher | import("../student/student.entity").Student | import("../school/s\u0441hool.entity").School>;
     createUser(dto: CreateUserDto): Promise<{
         user_role_id: number;
         id: number;

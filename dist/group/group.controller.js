@@ -19,92 +19,124 @@ const group_service_1 = require("./group.service");
 const roles_guard_1 = require("../auth/roles-guard");
 const create_group_dto_1 = require("./dtos/create-group.dto");
 const add_students_dto_1 = require("./dtos/add-students.dto");
+const user_decorator_1 = require("../decorators/user.decorator");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const roles_enum_1 = require("../constants/roles/roles.enum");
 let GroupController = class GroupController {
     constructor(groupService) {
         this.groupService = groupService;
     }
-    async getGroups() {
-        return await this.groupService.getGroups();
+    async getGroups(user) {
+        return await this.groupService.getGroups(user);
     }
-    async getGroupDetails(id) {
-        return await this.groupService.getGroupDetails(id);
+    async getGroupDetails(user, id) {
+        return await this.groupService.getGroupDetails(user, id);
     }
-    async createGroup(createGroup) {
-        return await this.groupService.createGroup(createGroup);
+    async getTeacherGroupDetails(user, id) {
+        return await this.groupService.getTeacherGroupDetails(user, id);
     }
-    async addStudent(student_id) {
-        return await this.groupService.addStudent(student_id);
+    async createGroup(user, createGroup) {
+        return await this.groupService.createGroup(user, createGroup);
     }
-    async addStudents(addStudents) {
-        return await this.groupService.addStudents(addStudents);
+    async addStudent(user, student_id) {
+        return await this.groupService.addStudent(user, student_id);
     }
-    async deleteStudent(student_id) {
-        return await this.groupService.deleteStudent(student_id);
+    async addStudents(user, id, addStudents) {
+        return await this.groupService.addStudents(id, user, addStudents);
     }
-    async deleteGroup(id) {
-        return await this.groupService.deleteGroup(id);
+    async deleteStudent(user, student_id) {
+        return await this.groupService.deleteStudent(user, student_id);
     }
-    async assignTeacher(teacher_id) {
-        return await this.groupService.assignTeacher(teacher_id);
+    async deleteGroup(user, id) {
+        return await this.groupService.deleteGroup(user, id);
+    }
+    async assignTeacher(user, teacher_id) {
+        return await this.groupService.assignTeacher(user, teacher_id);
     }
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER, roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "getGroups", null);
 __decorate([
-    (0, common_1.Get)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)('/:id/school'),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "getGroupDetails", null);
 __decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Get)('/:id/teacher'),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_group_dto_1.CreateGroup]),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", Promise)
+], GroupController.prototype, "getTeacherGroupDetails", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, create_group_dto_1.CreateGroup]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "createGroup", null);
 __decorate([
     (0, common_1.Put)('/student/:student_id'),
-    __param(0, (0, common_1.Param)('student_id')),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('student_id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "addStudent", null);
 __decorate([
-    (0, common_1.Put)('/students'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Put)('/:id/students'),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [add_students_dto_1.AddStudents]),
+    __metadata("design:paramtypes", [Object, Number, add_students_dto_1.AddStudents]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "addStudents", null);
 __decorate([
     (0, common_1.Delete)('/student/:student_id'),
-    __param(0, (0, common_1.Param)('student_id')),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('student_id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "deleteStudent", null);
 __decorate([
     (0, common_1.Delete)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "deleteGroup", null);
 __decorate([
     (0, common_1.Patch)('/teacher/:teacher_id'),
-    __param(0, (0, common_1.Param)('teacher_id')),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Param)('teacher_id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], GroupController.prototype, "assignTeacher", null);
 GroupController = __decorate([
-    (0, swagger_1.ApiTags)("Group"),
+    (0, swagger_1.ApiTags)('Group'),
     (0, common_1.Controller)('group'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     __metadata("design:paramtypes", [group_service_1.GroupService])
