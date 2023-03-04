@@ -18,10 +18,20 @@ class CreateLessonDto {
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)({
+        name: "student_id",
+        example: 1,
+        description: "Id of student"
+    }),
     __metadata("design:type", Number)
 ], CreateLessonDto.prototype, "student_id", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, swagger_1.ApiProperty)({
+        name: "title",
+        example: "New lesson",
+        description: "Lesson title"
+    }),
     (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], CreateLessonDto.prototype, "title", void 0);
@@ -40,7 +50,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsDate)(),
     (0, swagger_1.ApiProperty)({
-        name: "date_from",
+        name: "date_to",
         example: "2023-02-23T13:08:38.995Z",
         description: "Date from value"
     }),

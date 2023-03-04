@@ -22,10 +22,12 @@ const roles_enum_1 = require("../constants/roles/roles.enum");
 const role_field_enum_1 = require("../constants/roles/role-field.enum");
 const user_service_1 = require("../user/user.service");
 const student_service_1 = require("../student/student.service");
+const teacher_entity_1 = require("../teacher/teacher.entity");
 let GroupService = class GroupService {
-    constructor(groupRepository, userRepository, usersService, studentService) {
+    constructor(groupRepository, userRepository, teacherRepository, usersService, studentService) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
+        this.teacherRepository = teacherRepository;
         this.usersService = usersService;
         this.studentService = studentService;
     }
@@ -117,11 +119,54 @@ let GroupService = class GroupService {
         const students = await this.studentService.getStudentByIds(addStudents.student_ids);
         return await this.groupRepository.save(Object.assign(Object.assign({}, group), { students: [...group.students, ...students] }));
     }
-    async addStudent(user, student_id) {
+    async addStudent(id, user, student_id) {
+        const user_role = await this.userRepository.findOne({
+            select: ['user_role_id'],
+            where: {
+                id: user.id,
+            },
+        });
+        const group = await this.groupRepository.findOne({
+            where: {
+                id,
+                school: {
+                    id: user_role.user_role_id,
+                },
+            },
+        });
+        const student = await this.studentService.getStudentById(student_id);
+        return await this.groupRepository.save(Object.assign(Object.assign({}, group), { students: [...group.students, student] }));
     }
-    async deleteStudent(user, student_id) {
+    async deleteStudent(id, user, student_id) {
+        const user_role = await this.userRepository.findOne({
+            select: ['user_role_id'],
+            where: {
+                id: user.id,
+            },
+        });
+        const group = await this.groupRepository.findOne({
+            where: {
+                id,
+                school: {
+                    id: user_role.user_role_id,
+                },
+            },
+        });
+        const targetStudent = await this.studentService.getStudentById(student_id);
+        return await this.groupRepository.save(Object.assign(Object.assign({}, group), { students: group.students.filter(student => student.id !== targetStudent.id) }));
     }
-    async assignTeacher(user, teacher_id) {
+    async assignTeacher(id, user, teacher_id) {
+        const group = await this.groupRepository.findOne({ where: { id } });
+        const school = await this.usersService.getUserRoleDetails(user);
+        if (group.school.id !== school.id) {
+            throw new common_1.ForbiddenException();
+        }
+        const teacher = await this.teacherRepository.findOne({
+            where: {
+                id: teacher_id
+            }
+        });
+        await this.groupRepository.save(Object.assign(Object.assign({}, group), { teacher }));
     }
     async deleteGroup(user, id) {
     }
@@ -130,7 +175,9 @@ GroupService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(group_entity_1.Group)),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __param(2, (0, typeorm_1.InjectRepository)(teacher_entity_1.Teacher)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         user_service_1.UsersService,
         student_service_1.StudentService])

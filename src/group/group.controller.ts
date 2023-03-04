@@ -40,10 +40,10 @@ export class GroupController {
     return await this.groupService.createGroup(user, createGroup);
   }
 
-  @Put('/student/:student_id')
+  @Put('/:id/student/:student_id')
   @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
-  async addStudent(@User() user: AuthUser, @Param('student_id') student_id: number) {
-    return await this.groupService.addStudent(user, student_id);
+  async addStudent(@User() user: AuthUser, @Param('id') id: number, @Param('student_id') student_id: number) {
+    return await this.groupService.addStudent(id, user, student_id);
   }
 
   @Put('/:id/students')
@@ -52,10 +52,10 @@ export class GroupController {
     return await this.groupService.addStudents(id, user, addStudents);
   }
 
-  @Delete('/student/:student_id')
+  @Delete('/:id/student/:student_id')
   @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
-  async deleteStudent(@User() user: AuthUser, @Param('student_id') student_id: number) {
-    return await this.groupService.deleteStudent(user, student_id);
+  async deleteStudent(@User() user: AuthUser, @Param('id') id: number, @Param('student_id') student_id: number) {
+    return await this.groupService.deleteStudent(id, user, student_id);
   }
 
   @Delete('/:id')
@@ -64,9 +64,9 @@ export class GroupController {
     return await this.groupService.deleteGroup(user, id);
   }
 
-  @Patch('/teacher/:teacher_id')
+  @Patch('/:id/teacher/:teacher_id')
   @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
-  async assignTeacher(@User() user: AuthUser, @Param('teacher_id') teacher_id: number) {
-    return await this.groupService.assignTeacher(user, teacher_id);
+  async assignTeacher(@User() user: AuthUser, @Param('id') id: number, @Param('teacher_id') teacher_id: number) {
+    return await this.groupService.assignTeacher(id, user, teacher_id);
   }
 }

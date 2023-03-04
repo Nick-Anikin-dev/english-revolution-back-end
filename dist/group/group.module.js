@@ -16,11 +16,12 @@ const auth_module_1 = require("../auth/auth.module");
 const user_entity_1 = require("../user/user.entity");
 const user_module_1 = require("../user/user.module");
 const student_module_1 = require("../student/student.module");
+const teacher_entity_1 = require("../teacher/teacher.entity");
 let GroupModule = class GroupModule {
 };
 GroupModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UsersModule, auth_module_1.AuthModule, student_module_1.StudentModule, typeorm_1.TypeOrmModule.forFeature([group_entity_1.Group, user_entity_1.User])],
+        imports: [user_module_1.UsersModule, auth_module_1.AuthModule, student_module_1.StudentModule, typeorm_1.TypeOrmModule.forFeature([group_entity_1.Group, user_entity_1.User, teacher_entity_1.Teacher])],
         controllers: [group_controller_1.GroupController],
         providers: [group_service_1.GroupService],
         exports: [group_service_1.GroupService],

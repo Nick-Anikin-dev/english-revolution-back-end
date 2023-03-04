@@ -17,9 +17,15 @@ const common_1 = require("@nestjs/common");
 const teacher_service_1 = require("./teacher.service");
 const swagger_1 = require("@nestjs/swagger");
 const roles_guard_1 = require("../auth/roles-guard");
+const user_decorator_1 = require("../decorators/user.decorator");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const roles_enum_1 = require("../constants/roles/roles.enum");
 let TeacherController = class TeacherController {
     constructor(teacherService) {
         this.teacherService = teacherService;
+    }
+    async getTeacher(user) {
+        return await this.teacherService.getTeachers(user);
     }
     async findTeachersByUsername(username) {
         return await this.teacherService.findTeachersByUsername(username);
@@ -28,6 +34,14 @@ let TeacherController = class TeacherController {
         return await this.teacherService.getTeacherByUserId(id);
     }
 };
+__decorate([
+    (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], TeacherController.prototype, "getTeacher", null);
 __decorate([
     (0, common_1.Get)('/search'),
     __param(0, (0, common_1.Query)('username')),

@@ -12,7 +12,7 @@ import { Teacher } from '../teacher/teacher.entity';
 @Module({
   imports: [
     forwardRef(() => AuthModule),
-    TypeOrmModule.forFeature([ School, User, Teacher ]),
+    TypeOrmModule.forFeature([ School, User, Teacher, School ]),
     StudentModule,
     TeacherModule
   ],

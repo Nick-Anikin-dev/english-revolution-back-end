@@ -14,11 +14,13 @@ const student_controller_1 = require("./student.controller");
 const student_service_1 = require("./student.service");
 const user_entity_1 = require("../user/user.entity");
 const auth_module_1 = require("../auth/auth.module");
+const teacher_entity_1 = require("../teacher/teacher.entity");
+const s_hool_entity_1 = require("../school/s\u0441hool.entity");
 let StudentModule = class StudentModule {
 };
 StudentModule = __decorate([
     (0, common_1.Module)({
-        imports: [(0, common_1.forwardRef)(() => auth_module_1.AuthModule), typeorm_1.TypeOrmModule.forFeature([student_entity_1.Student, user_entity_1.User])],
+        imports: [(0, common_1.forwardRef)(() => auth_module_1.AuthModule), typeorm_1.TypeOrmModule.forFeature([student_entity_1.Student, user_entity_1.User, teacher_entity_1.Teacher, s_hool_entity_1.School])],
         controllers: [student_controller_1.StudentController],
         providers: [student_service_1.StudentService],
         exports: [student_service_1.StudentService]

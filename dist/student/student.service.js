@@ -19,10 +19,47 @@ const student_entity_1 = require("./student.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const user_entity_1 = require("../user/user.entity");
 const roles_enum_1 = require("../constants/roles/roles.enum");
+const teacher_entity_1 = require("../teacher/teacher.entity");
+const s_hool_entity_1 = require("../school/s\u0441hool.entity");
 let StudentService = class StudentService {
-    constructor(studentRepository, userRepository) {
+    constructor(studentRepository, teacherRepository, schoolRepository, userRepository) {
         this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
+        this.schoolRepository = schoolRepository;
         this.userRepository = userRepository;
+    }
+    async getStudents(user) {
+        if (user.role === roles_enum_1.RolesEnum.TEACHER) {
+            const teacher = await this.teacherRepository.findOne({
+                where: {
+                    user_id: user.id,
+                },
+            });
+            return await this.studentRepository.find({
+                where: {
+                    teacher: {
+                        id: teacher.id,
+                    },
+                },
+            });
+        }
+        const school = await this.schoolRepository.findOne({
+            where: {
+                user_id: user.id,
+            },
+        });
+        return await this.studentRepository.find({
+            where: {
+                school: {
+                    id: school.id,
+                },
+            },
+        });
+    }
+    async getStudentById(id) {
+        return await this.studentRepository.findOne({
+            where: { id }
+        });
     }
     async createStudent(user_id) {
         const new_student = this.studentRepository.create({ user_id });
@@ -52,8 +89,12 @@ let StudentService = class StudentService {
 StudentService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(student_entity_1.Student)),
-    __param(1, (0, typeorm_2.InjectRepository)(user_entity_1.User)),
+    __param(1, (0, typeorm_2.InjectRepository)(teacher_entity_1.Teacher)),
+    __param(2, (0, typeorm_2.InjectRepository)(s_hool_entity_1.School)),
+    __param(3, (0, typeorm_2.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
+        typeorm_1.Repository,
         typeorm_1.Repository])
 ], StudentService);
 exports.StudentService = StudentService;

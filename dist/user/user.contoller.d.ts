@@ -14,5 +14,5 @@ export declare class UsersController {
         role_type: import("../constants/roles/roles.enum").RolesEnum;
         user_role_id: number;
     }[]>;
-    getUserDetails(user: AuthUser): Promise<import("../teacher/teacher.entity").Teacher | import("../student/student.entity").Student | import("../school/s\u0441hool.entity").School>;
+    getUserDetails(user: AuthUser): Promise<import("../student/student.entity").Student | import("../teacher/teacher.entity").Teacher | import("../school/s\u0441hool.entity").School>;
 }

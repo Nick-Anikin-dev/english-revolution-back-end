@@ -5,9 +5,10 @@ import { TeacherController } from "./teacher.controller";
 import { TeacherService } from "./teacher.service";
 import { User } from "../user/user.entity";
 import { AuthModule } from "../auth/auth.module";
+import { School } from '../school/sсhool.entity';
 
 @Module({
-  imports: [  forwardRef(() => AuthModule), TypeOrmModule.forFeature([ Teacher, User ]) ],
+  imports: [  forwardRef(() => AuthModule), TypeOrmModule.forFeature([ Teacher, User, School ]) ],
   controllers: [ TeacherController ],
   providers: [ TeacherService ],
   exports: [ TeacherService ]

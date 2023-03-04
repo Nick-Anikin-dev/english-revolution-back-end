@@ -13,6 +13,12 @@ import { AuthUser } from '../auth/interfaces/auth-user.interface';
 export class StudentController{
   constructor(private readonly studentService: StudentService) {}
 
+  @Get()
+  @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
+  async getStudents(@User() user: AuthUser){
+    return await this.studentService.getStudents(user);
+  }
+
   @Get('/search')
   @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
   async findStudentsByUsername(@User() user: AuthUser, @Query('username') username: string){
@@ -20,6 +26,7 @@ export class StudentController{
   }
 
   @Get('/:id')
+  @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
   async getStudentByUserId(@Param('id') id: number){
     return await this.studentService.getStudentByUserId(id);
   }

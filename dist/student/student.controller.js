@@ -24,6 +24,9 @@ let StudentController = class StudentController {
     constructor(studentService) {
         this.studentService = studentService;
     }
+    async getStudents(user) {
+        return await this.studentService.getStudents(user);
+    }
     async findStudentsByUsername(user, username) {
         return await this.studentService.findStudentsByUsername(user, username);
     }
@@ -31,6 +34,14 @@ let StudentController = class StudentController {
         return await this.studentService.getStudentByUserId(id);
     }
 };
+__decorate([
+    (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER, roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
+    __param(0, (0, user_decorator_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], StudentController.prototype, "getStudents", null);
 __decorate([
     (0, common_1.Get)('/search'),
     (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER, roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
@@ -42,6 +53,7 @@ __decorate([
 ], StudentController.prototype, "findStudentsByUsername", null);
 __decorate([
     (0, common_1.Get)('/:id'),
+    (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER, roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

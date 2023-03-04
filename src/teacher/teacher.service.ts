@@ -4,14 +4,33 @@ import { ILike, Repository } from 'typeorm';
 import { Teacher } from "./teacher.entity";
 import { RolesEnum } from '../constants/roles/roles.enum';
 import { User } from '../user/user.entity';
+import { AuthUser } from '../auth/interfaces/auth-user.interface';
+import { School } from '../school/sсhool.entity';
 
 @Injectable()
 export class TeacherService {
   constructor(
     @InjectRepository(Teacher)
     private readonly teacherRepository: Repository<Teacher>,
+    @InjectRepository(School)
+    private readonly schoolsRepository: Repository<School>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>) {
+  }
+
+  async getTeachers(user: AuthUser){
+    const school = await this.schoolsRepository.findOne({
+      where: {
+        user_id: user.id
+      }
+    })
+    return await this.teacherRepository.find({
+      where: {
+        school: {
+          id: school.id
+        }
+      }
+    })
   }
 
   async createTeacher(user_id: number) {

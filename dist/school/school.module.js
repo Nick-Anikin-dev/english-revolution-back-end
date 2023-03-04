@@ -23,7 +23,7 @@ SchoolModule = __decorate([
     (0, common_1.Module)({
         imports: [
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
-            typeorm_1.TypeOrmModule.forFeature([s_hool_entity_1.School, user_entity_1.User, teacher_entity_1.Teacher]),
+            typeorm_1.TypeOrmModule.forFeature([s_hool_entity_1.School, user_entity_1.User, teacher_entity_1.Teacher, s_hool_entity_1.School]),
             student_module_1.StudentModule,
             teacher_module_1.TeacherModule
         ],

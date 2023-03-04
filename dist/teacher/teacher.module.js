@@ -14,11 +14,12 @@ const teacher_controller_1 = require("./teacher.controller");
 const teacher_service_1 = require("./teacher.service");
 const user_entity_1 = require("../user/user.entity");
 const auth_module_1 = require("../auth/auth.module");
+const s_hool_entity_1 = require("../school/s\u0441hool.entity");
 let TeacherModule = class TeacherModule {
 };
 TeacherModule = __decorate([
     (0, common_1.Module)({
-        imports: [(0, common_1.forwardRef)(() => auth_module_1.AuthModule), typeorm_1.TypeOrmModule.forFeature([teacher_entity_1.Teacher, user_entity_1.User])],
+        imports: [(0, common_1.forwardRef)(() => auth_module_1.AuthModule), typeorm_1.TypeOrmModule.forFeature([teacher_entity_1.Teacher, user_entity_1.User, s_hool_entity_1.School])],
         controllers: [teacher_controller_1.TeacherController],
         providers: [teacher_service_1.TeacherService],
         exports: [teacher_service_1.TeacherService]

@@ -5,14 +5,56 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
 import { RolesEnum } from '../constants/roles/roles.enum';
 import { AuthUser } from '../auth/interfaces/auth-user.interface';
+import { Teacher } from '../teacher/teacher.entity';
+import { School } from '../school/sсhool.entity';
 
 @Injectable()
 export class StudentService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    @InjectRepository(Teacher)
+    private readonly teacherRepository: Repository<Teacher>,
+    @InjectRepository(School)
+    private readonly schoolRepository: Repository<School>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>) {
+  }
+
+  async getStudents(user: AuthUser) {
+    if (user.role === RolesEnum.TEACHER) {
+      const teacher = await this.teacherRepository.findOne({
+        where: {
+          user_id: user.id,
+        },
+      });
+      return await this.studentRepository.find({
+        where: {
+          teacher: {
+            id: teacher.id,
+          },
+        },
+      });
+    }
+    const school = await this.schoolRepository.findOne({
+      where: {
+        user_id: user.id,
+      },
+    });
+    return await this.studentRepository.find({
+      where: {
+        school: {
+          id: school.id,
+
+        },
+      },
+    });
+  }
+
+  async getStudentById(id: number){
+    return await this.studentRepository.findOne({
+      where: {id}
+    })
   }
 
   async createStudent(user_id: number) {

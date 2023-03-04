@@ -20,6 +20,7 @@ const topic_module_1 = require("./topic/topic.module");
 const lesson_module_1 = require("./lesson/lesson.module");
 const homework_module_1 = require("./homework/homework.module");
 const schedule_module_1 = require("./schedule/schedule.module");
+const request_for_cooperation_module_1 = require("./request-for-cooperation/request-for-cooperation.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -37,7 +38,8 @@ AppModule = __decorate([
             lesson_module_1.LessonModule,
             homework_module_1.HomeworkModule,
             schedule_module_1.ScheduleModule,
-        ]
+            request_for_cooperation_module_1.RequestForCooperationModule,
+        ],
     })
 ], AppModule);
 exports.AppModule = AppModule;

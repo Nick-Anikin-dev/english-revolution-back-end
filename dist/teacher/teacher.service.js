@@ -19,10 +19,26 @@ const typeorm_2 = require("typeorm");
 const teacher_entity_1 = require("./teacher.entity");
 const roles_enum_1 = require("../constants/roles/roles.enum");
 const user_entity_1 = require("../user/user.entity");
+const s_hool_entity_1 = require("../school/s\u0441hool.entity");
 let TeacherService = class TeacherService {
-    constructor(teacherRepository, userRepository) {
+    constructor(teacherRepository, schoolsRepository, userRepository) {
         this.teacherRepository = teacherRepository;
+        this.schoolsRepository = schoolsRepository;
         this.userRepository = userRepository;
+    }
+    async getTeachers(user) {
+        const school = await this.schoolsRepository.findOne({
+            where: {
+                user_id: user.id
+            }
+        });
+        return await this.teacherRepository.find({
+            where: {
+                school: {
+                    id: school.id
+                }
+            }
+        });
     }
     async createTeacher(user_id) {
         const new_teacher = this.teacherRepository.create({ user_id });
@@ -52,8 +68,10 @@ let TeacherService = class TeacherService {
 TeacherService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(teacher_entity_1.Teacher)),
-    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __param(1, (0, typeorm_1.InjectRepository)(s_hool_entity_1.School)),
+    __param(2, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], TeacherService);
 exports.TeacherService = TeacherService;
