@@ -23,30 +23,24 @@ export class StudentService {
 
   async getStudents(user: AuthUser) {
     if (user.role === RolesEnum.TEACHER) {
-      const teacher = await this.teacherRepository.findOne({
-        where: {
-          user_id: user.id,
-        },
-      });
-      return await this.studentRepository.find({
-        where: {
-          teacher: {
-            id: teacher.id,
-          },
-        },
-      });
+      return await this.studentRepository
+        .createQueryBuilder('student')
+        .leftJoin(User, 'user',`user.user_role_id = student.id AND user.role_type = '${RolesEnum.STUDENT}'`)
+        .leftJoin(Teacher, 'school', `teacher.user_id = ${user.id}`)
+        .select(['student.id as id', 'first_name', 'email', 'last_name', 'username', 'user.id'])
+        .orderBy('user.first_name','ASC')
+        .getRawMany();
     }
-    const school = await this.schoolRepository.findOne({
-      where: {
-        user_id: user.id,
-      },
-    });
 
-    return await this.studentRepository.createQueryBuilder('student')
-      .innerJoinAndMapOne('student.user', User, 'user', 'student.id = user.user_role_id')
-      .innerJoinAndMapOne('student.school', School, 'school', `school.user_id = ${school.user_id}`)
-      .getMany();
+    return await this.studentRepository
+      .createQueryBuilder('student')
+      .leftJoin(User, 'user',`user.user_role_id = student.id AND user.role_type = '${RolesEnum.STUDENT}'`)
+      .leftJoin(School, 'school', `school.user_id = ${user.id}`)
+      .select(['student.id as id', 'first_name', 'email', 'last_name', 'username', 'user.id'])
+      .orderBy('user.first_name','ASC')
+      .getRawMany();
   }
+
 
   async getStudentById(id: number){
     return await this.studentRepository.findOne({

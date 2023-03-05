@@ -10,7 +10,7 @@ export declare class StudentService {
     private readonly schoolRepository;
     private readonly userRepository;
     constructor(studentRepository: Repository<Student>, teacherRepository: Repository<Teacher>, schoolRepository: Repository<School>, userRepository: Repository<User>);
-    getStudents(user: AuthUser): Promise<Student[]>;
+    getStudents(user: AuthUser): Promise<any[]>;
     getStudentById(id: number): Promise<Student>;
     a(): Promise<import("typeorm").UpdateResult>;
     createStudent(user_id: number): Promise<Student>;

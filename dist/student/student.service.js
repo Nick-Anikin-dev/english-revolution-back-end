@@ -30,28 +30,21 @@ let StudentService = class StudentService {
     }
     async getStudents(user) {
         if (user.role === roles_enum_1.RolesEnum.TEACHER) {
-            const teacher = await this.teacherRepository.findOne({
-                where: {
-                    user_id: user.id,
-                },
-            });
-            return await this.studentRepository.find({
-                where: {
-                    teacher: {
-                        id: teacher.id,
-                    },
-                },
-            });
+            return await this.studentRepository
+                .createQueryBuilder('student')
+                .leftJoin(user_entity_1.User, 'user', `user.user_role_id = student.id AND user.role_type = '${roles_enum_1.RolesEnum.STUDENT}'`)
+                .leftJoin(teacher_entity_1.Teacher, 'school', `teacher.user_id = ${user.id}`)
+                .select(['student.id as id', 'first_name', 'email', 'last_name', 'username', 'user.id'])
+                .orderBy('user.first_name', 'ASC')
+                .getRawMany();
         }
-        const school = await this.schoolRepository.findOne({
-            where: {
-                user_id: user.id,
-            },
-        });
-        return await this.studentRepository.createQueryBuilder('student')
-            .innerJoinAndMapOne('student.user', user_entity_1.User, 'user', 'student.id = user.user_role_id')
-            .innerJoinAndMapOne('student.school', s_hool_entity_1.School, 'school', `school.user_id = ${school.user_id}`)
-            .getMany();
+        return await this.studentRepository
+            .createQueryBuilder('student')
+            .leftJoin(user_entity_1.User, 'user', `user.user_role_id = student.id AND user.role_type = '${roles_enum_1.RolesEnum.STUDENT}'`)
+            .leftJoin(s_hool_entity_1.School, 'school', `school.user_id = ${user.id}`)
+            .select(['student.id as id', 'first_name', 'email', 'last_name', 'username', 'user.id'])
+            .orderBy('user.first_name', 'ASC')
+            .getRawMany();
     }
     async getStudentById(id) {
         return await this.studentRepository.findOne({
