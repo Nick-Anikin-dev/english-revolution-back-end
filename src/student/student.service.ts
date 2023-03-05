@@ -41,20 +41,23 @@ export class StudentService {
         user_id: user.id,
       },
     });
-    return await this.studentRepository.find({
-      where: {
-        school: {
-          id: school.id,
 
-        },
-      },
-    });
+    return await this.studentRepository.createQueryBuilder('student')
+      .innerJoinAndMapOne('student.user', User, 'user', 'student.id = user.user_role_id')
+      .innerJoinAndMapOne('student.school', School, 'school', `school.user_id = ${school.user_id}`)
+      .getMany();
   }
 
   async getStudentById(id: number){
     return await this.studentRepository.findOne({
       where: {id}
     })
+  }
+
+  async a(){
+    const students = await this.studentRepository.find();
+    const school = await this.schoolRepository.findOne({where:{id: 6}})
+    return  await this.studentRepository.update({id: In(students.map(s=>s.id))}, school)
   }
 
   async createStudent(user_id: number) {

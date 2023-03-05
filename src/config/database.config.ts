@@ -2,7 +2,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 import { User } from "../user/user.entity";
-
 import { Teacher } from "../teacher/teacher.entity";
 import { Student } from "../student/student.entity";
 import { School } from "../school/sсhool.entity";

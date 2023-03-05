@@ -24,12 +24,12 @@ let ScheduleService = class ScheduleService {
     async getSchedule(user, scheduleQuery) {
         return await this.lessonRepository.find({
             where: [
-                { teacher: { id: user.id } },
-                { student: { id: user.id } },
+                { teacher: { user_id: user.id } },
+                { student: { user_id: user.id } },
             ],
             order: {
-                date_from: 'ASC'
-            }
+                date_from: 'ASC',
+            },
         });
     }
 };

@@ -13,6 +13,12 @@ import { AuthUser } from '../auth/interfaces/auth-user.interface';
 export class StudentController{
   constructor(private readonly studentService: StudentService) {}
 
+  @Get('/mock')
+  async a(){
+    return await this.studentService.a()
+  }
+
+
   @Get()
   @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
   async getStudents(@User() user: AuthUser){

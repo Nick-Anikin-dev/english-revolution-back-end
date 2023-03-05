@@ -9,7 +9,7 @@ export declare class GroupController {
     getGroupDetails(user: AuthUser, id: number): Promise<import("./group.entity").Group[]>;
     getTeacherGroupDetails(user: AuthUser, id: number): Promise<import("./group.entity").Group[]>;
     createGroup(user: AuthUser, createGroup: CreateGroup): Promise<{
-        school: import("../school/s\u0441hool.entity").School | import("../teacher/teacher.entity").Teacher | import("../student/student.entity").Student;
+        school: import("../student/student.entity").Student | import("../teacher/teacher.entity").Teacher | import("../school/s\u0441hool.entity").School;
         id: number;
         name: string;
         teacher: import("../teacher/teacher.entity").Teacher;

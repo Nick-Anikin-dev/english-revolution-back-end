@@ -24,6 +24,9 @@ let StudentController = class StudentController {
     constructor(studentService) {
         this.studentService = studentService;
     }
+    async a() {
+        return await this.studentService.a();
+    }
     async getStudents(user) {
         return await this.studentService.getStudents(user);
     }
@@ -34,6 +37,12 @@ let StudentController = class StudentController {
         return await this.studentService.getStudentByUserId(id);
     }
 };
+__decorate([
+    (0, common_1.Get)('/mock'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], StudentController.prototype, "a", null);
 __decorate([
     (0, common_1.Get)(),
     (0, roles_decorator_1.Roles)(roles_enum_1.RolesEnum.TEACHER, roles_enum_1.RolesEnum.ADMIN, roles_enum_1.RolesEnum.SCHOOL_SUPER_ADMIN),

@@ -18,7 +18,7 @@ export declare class GroupService {
     getGroupDetails(user: AuthUser, id: number): Promise<Group[]>;
     getTeacherGroupDetails(user: AuthUser, id: number): Promise<Group[]>;
     createGroup(user: AuthUser, createGroup: CreateGroup): Promise<{
-        school: Teacher | import("../school/s\u0441hool.entity").School | import("../student/student.entity").Student;
+        school: import("../student/student.entity").Student | Teacher | import("../school/s\u0441hool.entity").School;
         id: number;
         name: string;
         teacher: Teacher;
