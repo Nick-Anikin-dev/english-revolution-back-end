@@ -19,18 +19,13 @@ export class TeacherService {
   }
 
   async getTeachers(user: AuthUser){
-    const school = await this.schoolsRepository.findOne({
-      where: {
-        user_id: user.id
-      }
-    })
-    return await this.teacherRepository.find({
-      where: {
-        school: {
-          id: school.id
-        }
-      }
-    })
+    return await this.teacherRepository
+      .createQueryBuilder('teacher')
+      .leftJoin(User, 'user',`user.user_role_id = teacher.id AND user.role_type = '${RolesEnum.TEACHER}'`)
+      .leftJoin(School, 'school', `school.user_id = ${user.id}`)
+      .select(['teacher.id as id', 'first_name', 'email', 'last_name', 'username', 'user.id'])
+      .orderBy('user.first_name','ASC')
+      .getRawMany();
   }
 
   async createTeacher(user_id: number) {

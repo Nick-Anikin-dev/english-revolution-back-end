@@ -8,9 +8,10 @@ import { User } from '../user/user.entity';
 import { UsersModule } from '../user/user.module';
 import { StudentModule } from '../student/student.module';
 import { Teacher } from '../teacher/teacher.entity';
+import { Student } from '../student/student.entity';
 
 @Module({
-  imports: [ UsersModule, AuthModule, StudentModule, TypeOrmModule.forFeature([ Group, User, Teacher ]) ],
+  imports: [ UsersModule, AuthModule, StudentModule, TypeOrmModule.forFeature([ Group, User, Teacher, Student ]) ],
   controllers: [ GroupController ],
   providers: [ GroupService ],
   exports: [ GroupService ],

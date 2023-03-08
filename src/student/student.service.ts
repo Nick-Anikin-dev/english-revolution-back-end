@@ -48,12 +48,6 @@ export class StudentService {
     })
   }
 
-  async a(){
-    const students = await this.studentRepository.find();
-    const school = await this.schoolRepository.findOne({where:{id: 6}})
-    return  await this.studentRepository.update({id: In(students.map(s=>s.id))}, school)
-  }
-
   async createStudent(user_id: number) {
     const new_student = this.studentRepository.create({ user_id });
     return await this.studentRepository.save(new_student);
@@ -75,10 +69,13 @@ export class StudentService {
     });
   }
 
-  async findStudentsByUsername(user: AuthUser, username: string) {
+  async findStudentsByUsername(user: AuthUser, query: string) {
     return await this.userRepository.find({
       select: [ 'id', 'user_role_id', 'username', 'first_name', 'last_name', 'email' ],
-      where: { username: ILike(`%${username}%`), role_type: RolesEnum.STUDENT },
+      where: [
+        { first_name: ILike(`%${query}%`), role_type: RolesEnum.STUDENT },
+        { last_name: ILike(`%${query}%`), role_type: RolesEnum.STUDENT },
+      ],
     });
   }
 }

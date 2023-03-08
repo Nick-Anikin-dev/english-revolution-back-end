@@ -16,7 +16,7 @@ export class TeacherController {
 
   @Get()
   @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
-  async getTeacher(@User() user: AuthUser){
+  async getTeachers(@User() user: AuthUser){
     return await this.teacherService.getTeachers(user);
   }
 

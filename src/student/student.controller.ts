@@ -13,12 +13,6 @@ import { AuthUser } from '../auth/interfaces/auth-user.interface';
 export class StudentController{
   constructor(private readonly studentService: StudentService) {}
 
-  @Get('/mock')
-  async a(){
-    return await this.studentService.a()
-  }
-
-
   @Get()
   @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
   async getStudents(@User() user: AuthUser){
@@ -27,8 +21,8 @@ export class StudentController{
 
   @Get('/search')
   @Roles(RolesEnum.TEACHER, RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
-  async findStudentsByUsername(@User() user: AuthUser, @Query('username') username: string){
-    return await this.studentService.findStudentsByUsername(user, username);
+  async findStudentsByUsername(@User() user: AuthUser, @Query('query') query: string){
+    return await this.studentService.findStudentsByUsername(user, query);
   }
 
   @Get('/:id')

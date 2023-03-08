@@ -22,17 +22,12 @@ export class GroupController {
     return await this.groupService.getGroups(user);
   }
 
-  @Get('/:id/school')
+  @Get('/:id')
   @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
   async getGroupDetails(@User() user: AuthUser, @Param('id') id: number) {
     return await this.groupService.getGroupDetails(user, id);
   }
 
-  @Get('/:id/teacher')
-  @Roles(RolesEnum.TEACHER)
-  async getTeacherGroupDetails(@User() user: AuthUser, @Param('id') id: number) {
-    return await this.groupService.getTeacherGroupDetails(user, id);
-  }
 
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.SCHOOL_SUPER_ADMIN)
